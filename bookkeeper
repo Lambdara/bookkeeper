@@ -2,9 +2,6 @@
 
 from sys import argv
 
-# Set a name
-name = "Bookkeeping"
-
 # Data is kept as a dict of `name:credit`
 data = dict()
 
@@ -35,7 +32,7 @@ def pay(payer,payees,subject,amount):
     log.append(record)
 
 # Print current state to HTML file
-def make_html(path):
+def make_html(path,name='Bookkeeping'):
     html = str()
 
     html += "<!doctype html>\n"
@@ -73,8 +70,8 @@ args = argv[1:]
 explanation = """Please specifiy your action in an argument, your options are:
 `bookkeeper pay payer payee1,payee2,.. subject amount`
 example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
-`bookkeeper html path`
-example: `bookkeeper html debts.html`"""
+`bookkeeper html path [title (default:'Bookkeeping')]`
+example: `bookkeeper html debts.html 'My Special Bookkeeping'`"""
 
 if len(args) == 0:
     print(explanation)
@@ -82,4 +79,8 @@ else:
     if args[0] == "pay":
         pay(args[1],args[2].split(','),args[3],float(args[4]))
     elif args[0] == "html":
-        make_html(args[1])
+        if len(args) == 3:
+            make_html(args[1],args[2])
+        else:
+            make_html(args[1])
+        
