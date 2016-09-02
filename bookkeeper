@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from sys import argv
+from os.path import isfile
 
 # Data is kept as a dict of `name:credit`
 data = dict()
@@ -11,6 +12,38 @@ data = dict()
 # - The thing payed for
 # - The amount payed
 log = list()
+
+if isfile('.bookkeeper.config'):
+    with open('.bookkeeper.config','r') as file:
+        lines = file.read().splitlines()
+        name = lines[0]
+        default_html = lines[1]
+        file.close()
+else:
+    with open('.bookkeeper.config','w') as file:
+        file.write('Bookkeeping\nmy_bookkeeping.html')
+        file.close()
+
+if isfile('.bookkeeper.log'):
+    with open('.bookkeeper.log','r') as file:
+        lines = file.read().splitlines()
+        for line in lines:
+            line = line.split('~')
+            payer = line[0]
+            payees = line[1].split(',')
+            subject = line[2]
+            amount = float(line[3])
+            record = (payer,payees,subject,amount)
+            log.append(record)
+        file.close()
+        
+if isfile('.bookkeeper.data'):
+    with open('.bookkeeper.data','r') as file:
+        lines = file.read().splitlines()
+        for line in lines:
+            line = line.split('~')
+            data[line[0]] = float(line[1])
+        file.close()
 
 # Define a function for mutating the records
 def mutate(name,amount):
@@ -83,4 +116,13 @@ else:
             make_html(args[1],args[2])
         else:
             make_html(args[1])
-        
+
+with open('.bookkeeper.log','w') as file:
+    for (payer,payees,subject,amount) in log:
+        file.write(payer + '~' + ','.join(payees) + '~' + subject + '~' + str(amount) + '\n')
+    file.close()
+
+with open('.bookkeeper.data','w') as file:
+    for person in data.keys():
+        file.write(person + '~' + str(data[person]) + '\n')
+    file.close()
