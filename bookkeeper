@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+
+from sys import argv
+
 # Set a name
 name = "Bookkeeping"
 
@@ -61,3 +65,21 @@ def make_html(path):
 
     with open(path,'w') as file:
         file.write(html)
+
+# Handle args
+args = argv[1:]
+
+# If no args, explain how program works
+explanation = """Please specifiy your action in an argument, your options are:
+`bookkeeper pay payer payee1,payee2,.. subject amount`
+example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
+`bookkeeper html path`
+example: `bookkeeper html debts.html`"""
+
+if len(args) == 0:
+    print(explanation)
+else:
+    if args[0] == "pay":
+        pay(args[1],args[2].split(','),args[3],float(args[4]))
+    elif args[0] == "html":
+        make_html(args[1])
