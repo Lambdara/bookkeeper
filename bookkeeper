@@ -103,6 +103,25 @@ def make_html(path=default_html,name=name):
     with open(path,'w') as file:
         file.write(html)
 
+def display(mode):
+    if mode == 'config' or mode == 'all':
+        print('Bookkeeping Name: ' + name)
+        print('Default HTML file: ' + default_html)
+        print('Auto-Update: ' + update_mode)
+    if mode == 'data' or mode == 'all':
+        if mode == 'all':
+            print('\nBalances:')
+        for person in data.keys():
+            print(person + ": " + str(data[person]))
+    if mode == 'log' or mode == 'all':
+        if mode == 'all':
+            print('\nLog:')
+        for (payer,payees,subject,amount) in log:
+            print('payer: ' + payer)
+            print('payees: ' + ', '.join(payees))
+            print('subject: ' + subject)
+            print('amount: ' + str(amount) + '\n')
+
 # Handle args
 args = argv[1:]
 
@@ -117,7 +136,9 @@ example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
 `bookkeeper html`
 example: `bookkeeper html'`
 `bookkeeper set update yes/no`
-example: `bookkeeper set update yes`"""
+example: `bookkeeper set update yes`
+`bookkeeper display config/data/log/all`
+example: `bookkeeper display log`"""
 
 if len(args) == 0:
     print(explanation)
@@ -135,6 +156,8 @@ else:
             name = args[2]
         elif args[1] == "update":
             update_mode = args[3]
+    elif args[0] == "display":
+        display(args[1])
 
 with open('.bookkeeper.config','w') as file:
     file.write(name + '\n')
