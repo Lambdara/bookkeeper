@@ -17,12 +17,14 @@ log = list()
 name = 'Bookkeeping'
 # Set path for the html
 default_html = 'my_bookkeeping.html'
+update_mode = 'yes'
 
 if isfile('.bookkeeper.config'):
     with open('.bookkeeper.config','r') as file:
         lines = file.read().splitlines()
         name = lines[0]
         default_html = lines[1]
+        update_mode = lines[2]
         file.close()
 else:
     with open('.bookkeeper.config','w') as file:
@@ -113,13 +115,17 @@ example: `bookkeeper set name 'special name haha'`
 `bookkeeper pay payer payee1,payee2,.. subject amount`
 example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
 `bookkeeper html`
-example: `bookkeeper html'`"""
+example: `bookkeeper html'`
+`bookkeeper set update yes/no`
+example: `bookkeeper set update yes`"""
 
 if len(args) == 0:
     print(explanation)
 else:
     if args[0] == "pay":
         pay(args[1],args[2].split(','),args[3],float(args[4]))
+        if update_mode == 'yes':
+            make_html()
     elif args[0] == "html":
             make_html()
     elif args[0] == "set":
@@ -127,10 +133,13 @@ else:
             default_html = args[2]
         elif args[1] == "name":
             name = args[2]
+        elif args[1] == "update":
+            update_mode = args[3]
 
 with open('.bookkeeper.config','w') as file:
     file.write(name + '\n')
     file.write(default_html + '\n')
+    file.write(update_mode + '\n')
     file.close()
 
 with open('.bookkeeper.log','w') as file:
