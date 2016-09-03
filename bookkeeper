@@ -13,6 +13,11 @@ data = dict()
 # - The amount payed
 log = list()
 
+# Set name of the bookkeeping
+name = 'Bookkeeping'
+# Set path for the html
+default_html = 'my_bookkeeping.html'
+
 if isfile('.bookkeeper.config'):
     with open('.bookkeeper.config','r') as file:
         lines = file.read().splitlines()
@@ -65,7 +70,7 @@ def pay(payer,payees,subject,amount):
     log.append(record)
 
 # Print current state to HTML file
-def make_html(path,name='Bookkeeping'):
+def make_html(path=default_html,name=name):
     html = str()
 
     html += "<!doctype html>\n"
@@ -101,10 +106,14 @@ args = argv[1:]
 
 # If no args, explain how program works
 explanation = """Please specifiy your action in an argument, your options are:
+`bookkeeper set path custom_path`
+example: `bookkeeper set path myIndex.html`
+`bookkeeper set name custom_name`
+example: `bookkeeper set name 'special name haha'`
 `bookkeeper pay payer payee1,payee2,.. subject amount`
 example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
-`bookkeeper html path [title (default:'Bookkeeping')]`
-example: `bookkeeper html debts.html 'My Special Bookkeeping'`"""
+`bookkeeper html`
+example: `bookkeeper html'`"""
 
 if len(args) == 0:
     print(explanation)
@@ -112,10 +121,17 @@ else:
     if args[0] == "pay":
         pay(args[1],args[2].split(','),args[3],float(args[4]))
     elif args[0] == "html":
-        if len(args) == 3:
-            make_html(args[1],args[2])
-        else:
-            make_html(args[1])
+            make_html()
+    elif args[0] == "set":
+        if args[1] == "path":
+            default_html = args[2]
+        elif args[1] == "name":
+            name = args[2]
+
+with open('.bookkeeper.config','w') as file:
+    file.write(name + '\n')
+    file.write(default_html + '\n')
+    file.close()
 
 with open('.bookkeeper.log','w') as file:
     for (payer,payees,subject,amount) in log:
