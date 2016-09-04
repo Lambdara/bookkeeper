@@ -126,19 +126,22 @@ def display(mode):
 args = argv[1:]
 
 # If no args, explain how program works
-explanation = """Please specifiy your action in an argument, your options are:
-`bookkeeper set path custom_path`
-example: `bookkeeper set path myIndex.html`
-`bookkeeper set name custom_name`
-example: `bookkeeper set name 'special name haha'`
-`bookkeeper pay payer payee1,payee2,.. subject amount`
-example: `bookkeeper pay tom pete,tom,mike 'Dinner 10-2-2019' 21.4`
-`bookkeeper html`
-example: `bookkeeper html'`
-`bookkeeper set update yes/no`
-example: `bookkeeper set update yes`
-`bookkeeper display config/data/log/all`
-example: `bookkeeper display log`"""
+explanation = """Bookkeeper Usage:
+
+pay payer payee0,payee1,.. subject amount   Register payment by `payer` in name
+                                              of `payee0`, `payee1`, etc. for
+                                              `subject` sized `amount`
+
+html                                        Update HTML file
+
+set path new_path                           Set path for HTML file
+    name new_name                           Set name of bookkeeping
+    update {yes|no}                         Set HTML auto-updating on or off
+
+display {config|data|log|all}               Print config, data, log, or
+                                              everything to STDOUT"""
+
+
 
 if len(args) == 0:
     print(explanation)
@@ -158,6 +161,7 @@ else:
             update_mode = args[3]
     elif args[0] == "display":
         display(args[1])
+
 
 with open('.bookkeeper.config','w') as file:
     file.write(name + '\n')
