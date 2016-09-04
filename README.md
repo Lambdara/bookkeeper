@@ -10,6 +10,8 @@ In addition to that, it keeps an HTML file, `my_bookkeeping.html` by default.
 
 The available commands are:
 
+`init name path` sets name of the bookkeeping, and the path of the HTML file. For example: `init 'My Bookkeeping' bookkeeping.html`. This is a good choice to start a bookkeeping.
+
 `pay payer payee0,payee1,.. subject amount` registers a payment. The first argument is the payer. The second argument consists of comma-seperated names. (quote the argument if you want spaces, like so `'hans hansen,bart bartens'`) The third argument is the thing pay for (again, quote if you want spaces, like so `'nice bacon'`). The fourth argument is the amount payed; use a decimal point, not a comma (`10.24`; not `10,24`). For example: `pay hans bart,hans 'good beers', 10.24`
 
 `html` updates the HTML file. If auto-update is on (by default: yes), this will happen automatically.
