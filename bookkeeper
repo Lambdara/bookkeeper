@@ -128,6 +128,8 @@ args = argv[1:]
 # If no args, explain how program works
 explanation = """Bookkeeper Usage:
 
+init name path                              Set the name and the path
+
 pay payer payee0,payee1,.. subject amount   Register payment by `payer` in name
                                               of `payee0`, `payee1`, etc. for
                                               `subject` sized `amount`
@@ -142,11 +144,13 @@ display {config|data|log|all}               Print config, data, log, or
                                               everything to STDOUT"""
 
 
-
 if len(args) == 0:
     print(explanation)
 else:
-    if args[0] == "pay":
+    if args[0] == "init":
+        name = args[1]
+        default_html = args[2]
+    elif args[0] == "pay":
         pay(args[1],args[2].split(','),args[3],float(args[4]))
         if update_mode == 'yes':
             make_html()
